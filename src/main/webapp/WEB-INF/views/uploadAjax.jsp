@@ -21,6 +21,26 @@
 <script>
 $(document).ready(function() {
 	
+	// 파일의 확장자나 크기의 사전 처리
+	var regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
+	var maxSize = 5242880; // 5MB
+	
+	function checkExtension(fileName, fileSize) {
+		
+		if(fileSize >= maxSize) {
+			alert("파일 사이즈 초과");
+			return false;
+		}
+		
+		if(regex.test(fileName)) {
+			alert("해당 종류의 파일은 업로드할 수 없습니다.");
+			return false;
+		}
+		
+		return true;
+	}
+
+	
 	$("#uploadBtn").on("click", function(e) {
 		
 		var formData = new FormData();   // 가상의 form 태그 객체, 브라우저 사용 제약 있음
@@ -31,6 +51,11 @@ $(document).ready(function() {
 		
 		//add filedate to formdata
 		for(var i = 0; i < files.length; i++) {
+			
+			if(!checkExtension(files[i].name, files[i].size)) {
+				return false;
+			}
+			
 			formData.append("uploadFile", files[i]);   /* 컨트롤러 파라미터와 이름 맞춤 */
 		}
 		
