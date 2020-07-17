@@ -3,6 +3,7 @@ package org.zerock.controller;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -84,6 +85,10 @@ public class UploadController {
 			// IE has file path
 			uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("\\") + 1);   // IE 파일 이름 처리
 			log.info("only file name: " + uploadFileName);
+			
+			UUID uuid = UUID.randomUUID();   // 랜덤 UUID 생성
+			
+			uploadFileName = uuid.toString() + "_" + uploadFileName;
 			
 //			File saveFile = new File(uploadFolder, uploadFileName);
 			File saveFile = new File(uploadPath, uploadFileName);
