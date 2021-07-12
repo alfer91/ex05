@@ -23,7 +23,7 @@ $(document).ready(function() {
 	
 	// 파일의 확장자나 크기의 사전 처리
 	var regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
-	var maxSize = 5242880; // 5MB
+	var maxSize = 10485760; // 10MB
 	
 	function checkExtension(fileName, fileSize) {
 		
@@ -66,7 +66,8 @@ $(document).ready(function() {
 			data: formData,   // formData 전송
 			type: 'POST',
 			success: function(result) {
-				alert("Uploaded");
+				
+				console.log(result); // 브라우저에서 Ajax 처리
 			}
 		});
 	});
