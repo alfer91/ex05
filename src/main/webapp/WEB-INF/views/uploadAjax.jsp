@@ -5,12 +5,40 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<style>
+	.uploadResult {
+		width: 100%;
+		background-color: gray;
+	}
+	
+	.uploadResult ul {
+		display: flex;
+		flex-flow: row;
+		justify-content: center;
+		align-items: center;
+	}
+	
+	.uploadResult ul li {
+		list-style: none;
+		padding: 10px;
+	}
+	
+	.uploadResult ul li img {
+		width: 20px;
+	}
+</style>
 </head>
 <body>
 <h1>Upload with Ajax</h1>
 
 <div class="uploadDiv">
 	<input type="file" name="uploadFile" multiple>
+</div>
+
+<div class="uploadResult">
+	<ul>
+	
+	</ul>
 </div>
 
 <button id="uploadBtn">Upload</button>
@@ -40,6 +68,7 @@ $(document).ready(function() {
 		return true;
 	}
 
+	var cloneObj = $(".uploadDiv").clone();  // <input type='file'>의 초기화
 	
 	$("#uploadBtn").on("click", function(e) {
 		
@@ -68,9 +97,35 @@ $(document).ready(function() {
 			success: function(result) {
 				
 				console.log(result); // 브라우저에서 Ajax 처리
+				
+				showUploadedFile(result);  // 업로드된 파일 이름 출력
+				
+				$(".uploadDiv").html(cloneObj.html());  // <input type='file'>의 초기화
 			}
 		});
 	});
+	
+	var uploadResult = $(".uploadResult ul");
+	
+	function showUploadedFile(uploadResultArr) {  // 업로드된 파일 이름 출력
+		
+		var str = "";
+		
+		$(uploadResultArr).each(function(i, obj) {
+			
+			if(!obj.image) {
+				str += "<li><img src='/resources/img/attach-icon-png-18.jpg'>" + obj.fileName + "</li>";  // 일반파일의 이미지 표시
+			} else {
+				//str += "<li>" + obj.fileName + "</li>";
+				
+				var fileCallPath = encodeURIComponent(obj.uploadPath + "/s_" + obj.uuid + "_" + obj.fileName);  // URI호출에 적합한 문자열로 인코딩(한글, 띄어쓰기), 이피지파일의 이미지 표시
+				
+				str += "<li><img src='/display?fileName=" + fileCallPath + "'></li>";
+			}
+		})
+		
+		uploadResult.append(str);
+	}
 });
 </script>
 </body>
